@@ -1,4 +1,4 @@
-package ua.com.foxminded.carmicroservice.servicelayer;
+package ua.com.foxminded.carmicroservice.service;
 
 import java.util.List;
 
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
-import ua.com.foxminded.carmicroservice.daolayer.CarDAO;
+import ua.com.foxminded.carmicroservice.dao.CarDAO;
 import ua.com.foxminded.carmicroservice.dto.CarDTO;
 import ua.com.foxminded.carmicroservice.models.Car;
 

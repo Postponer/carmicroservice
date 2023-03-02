@@ -3,6 +3,7 @@ package ua.com.foxminded.carmicroservice.controller;
 import java.net.URI;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,16 +15,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import lombok.AllArgsConstructor;
 import ua.com.foxminded.carmicroservice.dto.CarDTO;
 import ua.com.foxminded.carmicroservice.models.Car;
-import ua.com.foxminded.carmicroservice.servicelayer.CarService;
+import ua.com.foxminded.carmicroservice.service.CarService;
 
 @RestController
 @RequestMapping("/api/cars")
-@AllArgsConstructor
 public class CarController {
 
+	@Autowired
 	private CarService carService;
 
 	@GetMapping

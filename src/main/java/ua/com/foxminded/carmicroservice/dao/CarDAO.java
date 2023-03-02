@@ -1,4 +1,4 @@
-package ua.com.foxminded.carmicroservice.daolayer;
+package ua.com.foxminded.carmicroservice.dao;
 
 import java.util.List;
 

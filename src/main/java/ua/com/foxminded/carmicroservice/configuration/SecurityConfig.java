@@ -1,4 +1,4 @@
-package ua.com.foxminded.carmicroservice.appconfiguration;
+package ua.com.foxminded.carmicroservice.configuration;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,6 +11,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import ua.com.foxminded.carmicroservice.service.CustomUserDetailsService;
+
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
@@ -22,6 +24,7 @@ public class SecurityConfig {
 				.authorizeHttpRequests()
 				.requestMatchers(HttpMethod.GET, "/api/**").permitAll()
 				.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
+				.anyRequest().permitAll()
 				.and()
 				.formLogin().permitAll()
 				.and()

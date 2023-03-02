@@ -1,12 +1,11 @@
-package ua.com.foxminded.carmicroservice.appconfiguration;
+package ua.com.foxminded.carmicroservice.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import ua.com.foxminded.carmicroservice.daolayer.UserDAO;
-
+import ua.com.foxminded.carmicroservice.dao.UserDAO;
 
 public class CustomUserDetailsService implements UserDetailsService {
 

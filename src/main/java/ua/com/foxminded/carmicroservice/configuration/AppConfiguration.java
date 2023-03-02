@@ -1,14 +1,13 @@
-package ua.com.foxminded.carmicroservice.appconfiguration;
+package ua.com.foxminded.carmicroservice.configuration;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
 @EnableTransactionManagement
-public class AppConfiguration implements WebMvcConfigurer {
+public class AppConfiguration {
 
 	@Bean
 	public ModelMapper modelMapper() {

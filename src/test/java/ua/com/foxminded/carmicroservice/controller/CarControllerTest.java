@@ -2,7 +2,6 @@ package ua.com.foxminded.carmicroservice.controller;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
-import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.Arrays;
@@ -16,25 +15,33 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import ua.com.foxminded.carmicroservice.CarmicroserviceApplication;
+import ua.com.foxminded.carmicroservice.configuration.SecurityConfig;
+import ua.com.foxminded.carmicroservice.dao.UserDAO;
 import ua.com.foxminded.carmicroservice.dto.CarDTO;
 import ua.com.foxminded.carmicroservice.dto.CategoryDTO;
 import ua.com.foxminded.carmicroservice.dto.MakeDTO;
 import ua.com.foxminded.carmicroservice.dto.ModelDTO;
 import ua.com.foxminded.carmicroservice.models.Car;
-import ua.com.foxminded.carmicroservice.servicelayer.CarService;
+import ua.com.foxminded.carmicroservice.service.CarService;
 
 @WebMvcTest(CarController.class)
+@ContextConfiguration(classes = {SecurityConfig.class, CarmicroserviceApplication.class})
 @WithMockUser
 class CarControllerTest {
 
 	@MockBean
 	private CarService carService;
+	
+	@MockBean
+	private UserDAO userDao;
 
 	@Autowired
 	private MockMvc mockMvc;
@@ -364,6 +371,7 @@ class CarControllerTest {
 	void testSaveCar() throws Exception {
 		
 	    CarDTO car = new CarDTO();
+	    car.setId("1");
 	    car.setMake(new MakeDTO(1l, "Toyota"));
 	    car.setModel(new ModelDTO(1l, "Corolla"));
 	    car.setCategory(new CategoryDTO(1l, "Sedan"));
@@ -379,7 +387,7 @@ class CarControllerTest {
 	            .with(SecurityMockMvcRequestPostProcessors.httpBasic("username", "password")))
 	            .andExpect(MockMvcResultMatchers.status().isCreated())
 	            .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
-	            .andExpect(jsonPath("$.id", is(notNullValue())))
+	            .andExpect(jsonPath("$.id", is("1")))
 	            .andExpect(jsonPath("$.make.name", is("Toyota")))
 	            .andExpect(jsonPath("$.model.name", is("Corolla")))
 	            .andExpect(jsonPath("$.category.name", is("Sedan")))
