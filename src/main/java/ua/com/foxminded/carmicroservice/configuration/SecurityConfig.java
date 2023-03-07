@@ -1,22 +1,29 @@
 package ua.com.foxminded.carmicroservice.configuration;
 
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.config.annotation.web.configurers.oauth2.server.resource.OAuth2ResourceServerConfigurer;
+import org.springframework.security.core.session.SessionRegistryImpl;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.session.RegisterSessionAuthenticationStrategy;
+import org.springframework.security.web.authentication.session.SessionAuthenticationStrategy;
 
-import ua.com.foxminded.carmicroservice.service.CustomUserDetailsService;
+import lombok.RequiredArgsConstructor;
 
 @Configuration
 @EnableWebSecurity
+@EnableMethodSecurity
+@RequiredArgsConstructor
+@ComponentScan(basePackages = "ua.com.foxminded.carmicroservice.configuration")
 public class SecurityConfig {
 
+    private final KeycloakLogoutHandler keycloakLogoutHandler;
+	
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 
@@ -26,39 +33,22 @@ public class SecurityConfig {
 				.requestMatchers(HttpMethod.POST, "/api/**").authenticated()
 				.anyRequest().permitAll()
 				.and()
-				.formLogin().permitAll()
+				.oauth2Login()
 				.and()
 				.logout()
-				.logoutSuccessUrl("/").permitAll()
+				.addLogoutHandler(keycloakLogoutHandler)
+				.logoutSuccessUrl("/")
 				.and()
-				.authenticationProvider(authenticationProvider())
+				.oauth2ResourceServer(OAuth2ResourceServerConfigurer::jwt)
 				.build();
 
 	}
 
 	@Bean
-	public UserDetailsService userDetailsService() {
-
-		return new CustomUserDetailsService();
-
-	}
-
-	@Bean
-	public PasswordEncoder passwordEncoder() {
-
-		return new BCryptPasswordEncoder(10);
-
-	}
-
-	@Bean
-	public DaoAuthenticationProvider authenticationProvider() {
-
-		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
-		daoAuthenticationProvider.setUserDetailsService(userDetailsService());
-		daoAuthenticationProvider.setPasswordEncoder(passwordEncoder());
-
-		return daoAuthenticationProvider;
-
-	}
+    protected SessionAuthenticationStrategy sessionAuthenticationStrategy() {
+		
+        return new RegisterSessionAuthenticationStrategy(new SessionRegistryImpl());
+        
+    }
 
 }
