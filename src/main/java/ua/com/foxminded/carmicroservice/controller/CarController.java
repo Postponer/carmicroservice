@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import ua.com.foxminded.carmicroservice.dto.CarDTO;
 import ua.com.foxminded.carmicroservice.models.Car;
 import ua.com.foxminded.carmicroservice.service.CarService;
@@ -134,6 +136,7 @@ public class CarController {
 	}
 
 	@PostMapping
+	@Operation(summary = "Save car", security = @SecurityRequirement(name = "bearerAuth"))
 	public ResponseEntity<CarDTO> saveCar(@RequestBody CarDTO car) {
 
 		CarDTO savedCar = carService.save(car);
@@ -142,6 +145,7 @@ public class CarController {
 	}
 
 	@PutMapping("/{id}")
+	@Operation(summary = "Update car", security = @SecurityRequirement(name = "bearerAuth"))
 	public ResponseEntity<CarDTO> updateCar(@PathVariable String id, @RequestBody Car car) {
 
 		CarDTO updatedCar = carService.update(id, car);
@@ -150,6 +154,7 @@ public class CarController {
 	}
 
 	@DeleteMapping("/{id}")
+	@Operation(summary = "Delete car", security = @SecurityRequirement(name = "bearerAuth"))
 	public ResponseEntity<Void> deleteCarById(@PathVariable String id) {
 
 		carService.delete(id);
