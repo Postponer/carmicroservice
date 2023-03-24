@@ -10,13 +10,15 @@ services:
       - db
       - keycloak
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/carmicroservice
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=1234
       - SPRING_JPA_HIBERNATE_DDL_AUTO=update
       - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080/auth/
       - KEYCLOAK_REALM=oauth2-car-microservice-realm
       - KEYCLOAK_RESOURCE=oauth2-car-microservice-service
+    networks:
+      - my_network
           
   db:
     image: 'postgres:15-alpine'
@@ -35,8 +37,6 @@ services:
     environment:
       - KEYCLOAK_USER=admin
       - KEYCLOAK_PASSWORD=admin
-    ports:
-      - 9080:8080
     networks:
       my_network:
         aliases:
@@ -44,3 +44,4 @@ services:
       
 networks:
   my_network:
+    driver: bridge
