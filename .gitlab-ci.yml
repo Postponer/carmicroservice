@@ -1,0 +1,11 @@
+ stages:
+  - test
+  - deploy
+  
+ test-all:
+   stage: test
+   tags: [maven] 
+   except:
+     - main
+   script:
+     - mvn clean install
