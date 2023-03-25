@@ -1,0 +1,47 @@
+version: '2'
+
+services:
+  app:
+    image: 'appimage'
+    build:
+      context: .
+    container_name: app
+    depends_on:
+      - db
+      - keycloak
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://db:5432/postgres
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=1234
+      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - KEYCLOAK_AUTH_SERVER_URL=http://keycloak:8080/auth/
+      - KEYCLOAK_REALM=oauth2-car-microservice-realm
+      - KEYCLOAK_RESOURCE=oauth2-car-microservice-service
+    networks:
+      - my_network
+          
+  db:
+    image: 'postgres:15-alpine'
+    container_name: db
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1234
+    networks:
+      my_network:
+        aliases:
+          - db
+  
+  keycloak:
+    image: 'quay.io/keycloak/keycloak:15.0.2'
+    container_name: keycloak
+    environment:
+      - KEYCLOAK_USER=admin
+      - KEYCLOAK_PASSWORD=admin
+    networks:
+      my_network:
+        aliases:
+          - keycloak
+      
+networks:
+  my_network:
+    driver: bridge

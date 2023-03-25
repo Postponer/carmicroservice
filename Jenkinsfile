@@ -8,4 +8,4 @@ node {
       sh "${mvn}/bin/mvn clean verify sonar:sonar -Dsonar.projectKey=foxstudent102724_task4.2_AYcZBgomwaKRR0kpIkPg"
     }
   }
-}
+  
